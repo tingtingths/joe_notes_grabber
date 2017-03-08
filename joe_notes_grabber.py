@@ -5,6 +5,7 @@ import re
 import base64
 from argparse import ArgumentParser
 from urllib.request import urlopen
+from urllib.parse import urljoin
 
 
 def grab(url, user="", passwd="", file_exts=[]):
@@ -19,7 +20,9 @@ def grab(url, user="", passwd="", file_exts=[]):
     for m in matches:
         if os.path.splitext(m)[-1] in file_exts:
             m_comps = urllib.parse.urlparse(m)
-            link = m if m_comps.scheme != "" else base_url + m_comps.path + m_comps.query
+            print(base_url)
+            print(m_comps)
+            link = m if m_comps.scheme != "" else urljoin(base_url, m_comps.path, m_comps.query)
             r = urllib.request.Request(link)
             if user != "" and passwd != "":
                 r.add_header("Authorization", "Basic " + encoded_auth)
